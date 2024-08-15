@@ -12,6 +12,11 @@ def capture():
     image = resize(image, 800)
     return image
 
+def find_text(image):
+    '''Extract text from specified image'''
+    text = 0
+    return text
+
 def find_circle(image):
     '''Find the circles that surround the progess % to narrow down text recognition target area'''
     image_copy = image.copy()
@@ -27,29 +32,35 @@ def find_circle(image):
         minRadius=100,
         maxRadius=150
     )
-    
+    largest_circle = {'center':(0,0), 'radius':0}
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
             center = (i[0], i[1])
             radius = i[2]
-            print(radius)
-            cv2.circle(
-                image,
-                center,
-                radius,
-                (  0,  0, 255),
-                2
-            )
-    return image
+            if radius > largest_circle['radius']:
+                largest_circle = {'center':center, 'radius':radius}
+
+    height, width = image.shape[:2]
+    mask = np.zeros((height, width), dtype=np.uint8)
+    cv2.circle(
+        mask,
+        largest_circle['center'],
+        int(largest_circle['radius'] * 0.9),
+        255,
+        -1
+    )
+    masked = cv2.bitwise_and(image, image, mask=mask)
+    return masked
 
 def get_progress(image):
     '''Find and parse progress % from UI'''
     error = None
     progress = 23
     masked_image = mask_display(image)
-    circled_image = find_circle(masked_image)
-    cv2.imshow('image', circled_image)
+    circle_image = find_circle(masked_image)
+    progress = find_text(circle_image)
+    cv2.imshow('image', circle_image)
     cv2.waitKey(0)
     return error, progress
 
