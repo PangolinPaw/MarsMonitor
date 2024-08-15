@@ -82,12 +82,12 @@ def main():
 			icon = 'red_circle'
 			high_priority = True
 
-		notify(
-			config['ntfy_url'],
-			message,
-			tags=['MarsMonitor', status, icon],
-			high_priority=high_priority
-		)
+		# notify(
+		# 	config['ntfy_url'],
+		# 	message,
+		# 	tags=['MarsMonitor', status, icon],
+		# 	high_priority=high_priority
+		# )
 		
 		time.sleep(config.get('update_frequency', 300))
 
