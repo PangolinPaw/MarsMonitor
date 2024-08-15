@@ -55,11 +55,11 @@ def notify(url, message, attachment_url=None, tags=None, high_priority=False):
 
 def main():
 	config = init()
-	# notify(
-	# 	config['ntfy_url'],
-	# 	'MarsMonitor has started',
-	# 	tags=['MarsMonitor', 'startup', 'white_circle']
-	# )
+	notify(
+		config['ntfy_url'],
+		'MarsMonitor has started',
+		tags=['MarsMonitor', 'startup', 'white_circle']
+	)
 	while True:
 		image = vision.capture()
 		error, progress = vision.get_progress(image)
@@ -82,12 +82,12 @@ def main():
 			icon = 'red_circle'
 			high_priority = True
 
-		# notify(
-		# 	config['ntfy_url'],
-		# 	message,
-		# 	tags=['MarsMonitor', status, icon],
-		# 	high_priority=high_priority
-		# )
+		notify(
+			config['ntfy_url'],
+			message,
+			tags=['MarsMonitor', status, icon],
+			high_priority=high_priority
+		)
 		
 		time.sleep(config.get('update_frequency', 300))
 

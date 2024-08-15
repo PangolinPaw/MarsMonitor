@@ -16,3 +16,6 @@ nohup.out
 
 # Test images
 test_images/
+
+# Tesseract
+Tesseract-OCR/

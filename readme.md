@@ -8,6 +8,8 @@ Clone this repo, then:
 
 `pip install -r requirements.txt`
 
+If testing on Windows, you'll also need a copy of tesseract placed in the same directory as `mars_monitor.py`, it's available from https://github.com/UB-Mannheim/tesseract/wiki
+
 ## Usage
 
 ### Hardware

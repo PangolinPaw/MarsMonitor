@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
+from PIL import Image
 import platform
+import pytesseract
 
 def capture():
     '''Capture still image from camera'''
@@ -14,8 +16,18 @@ def capture():
 
 def find_text(image):
     '''Extract text from specified image'''
-    text = 0
-    return text
+    if platform.system() == 'Windows':
+        pytesseract.pytesseract.tesseract_cmd = r'Tesseract-OCR/tesseract.exe'
+    text = pytesseract.image_to_string(Image.fromarray(image))
+    clean_text = []
+    for character in text:
+        if character.isdigit():
+            clean_text.append(character)
+    clean_text = ''.join(clean_text)
+    if len(clean_text) > 0:
+        return int(clean_text)
+    else:
+        return None
 
 def find_circle(image):
     '''Find the circles that surround the progess % to narrow down text recognition target area'''
@@ -46,7 +58,7 @@ def find_circle(image):
     cv2.circle(
         mask,
         largest_circle['center'],
-        int(largest_circle['radius'] * 0.9),
+        int(largest_circle['radius'] * 0.75),
         255,
         -1
     )
@@ -60,8 +72,8 @@ def get_progress(image):
     masked_image = mask_display(image)
     circle_image = find_circle(masked_image)
     progress = find_text(circle_image)
-    cv2.imshow('image', circle_image)
-    cv2.waitKey(0)
+    if progress is None:
+        error = 'Unable to read dispaly'
     return error, progress
 
 def mask_display(image):
