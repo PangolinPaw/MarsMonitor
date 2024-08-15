@@ -89,7 +89,7 @@ def main():
 			high_priority=high_priority
 		)
 		
-		time.sleep(config.get('update_frequency', 300))
+		time.sleep(config.get('update_frequency', 1800))
 
 
 if __name__ == '__main__':

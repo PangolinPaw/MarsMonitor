@@ -33,7 +33,7 @@ Edit the `config.json` file to include your topic URL:
 }
 ```
 
-Then run the application with `python mars_monitor.py`
+Then run the application with `python mars_monitor.py` and you'll receive status update notifications every 30 minutes.
 
 You may want to set `mars_monitor.py` to run automatically at boot, but nstructions on how to do this are beyond the scope of this document.
 
