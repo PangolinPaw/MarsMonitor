@@ -23,9 +23,23 @@ Inside the `assets/` directory is an STL for a bracket that will hold a full-siz
 
 Status update notifications use the https://ntfy.sh/ service. To receive notifications, install this on your mobile device and set up your custom topic (see https://docs.ntfy.sh/#step-1-get-the-app)
 
-Edit the `config.json` file to include your topic URL
+Edit the `config.json` file to include your topic URL:
+
+```json
+{
+    "ntfy_url": "https://ntfy.sh/YOUR-TOPIC"
+}
+```
 
 Then run the application with `python mars_monitor.py`
 
 You may want to set `mars_monitor.py` to run automatically at boot, but nstructions on how to do this are beyond the scope of this document.
+
+
+## To do:
+
+1. Capture image from Pi camera
+2. Extract progress %
+3. Recognise error
+4. Flask webapp to host latest capture
 

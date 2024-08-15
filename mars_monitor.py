@@ -1,6 +1,8 @@
 import json
 import os
+import time
 import requests
+import vision
 
 dirname, _ = os.path.split(os.path.abspath(__file__))
 THIS_DIRECTORY = f'{dirname}{os.sep}'
@@ -29,14 +31,13 @@ def default_config():
 	}
 	save_json(config, f'{THIS_DIRECTORY}config.json')
 
-def save_json(data, filename):
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(json.dumps(data, indent=4))
-
 def load_json(filename):
     with open(filename, 'r', encoding='utf-8') as f:
         return json.loads(f.read())
 
+def save_json(data, filename):
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(data, indent=4))
 
 def notify(url, message, attachment_url=None, tags=None, high_priority=False):
     headers = {}
@@ -54,7 +55,41 @@ def notify(url, message, attachment_url=None, tags=None, high_priority=False):
 
 def main():
 	config = init()
-	notify(config['ntfy_url'], 'MarsMonitor has started', tags=['MarsMonitor', 'startup', 'white_circle'])
+	# notify(
+	# 	config['ntfy_url'],
+	# 	'MarsMonitor has started',
+	# 	tags=['MarsMonitor', 'startup', 'white_circle']
+	# )
+	while True:
+		image = vision.capture()
+		error, progress = vision.get_progress(image)
+		if error is None:
+			status = 'progress'
+			high_priority = False
+			if progress == 100:
+				message = 'Print complete'
+				icon = 'green_circle'
+				high_priority = True
+			elif progress > 75:
+				message = f'Print progress: {progress}%'
+				icon = 'yellow_circle'
+			elif progress < 50:
+				message = f'Print progress: {progress}%'
+				icon = 'orange_circle'
+		else:
+			message = f'Print error: {error}'
+			status = 'error'
+			icon = 'red_circle'
+			high_priority = True
+
+		notify(
+			config['ntfy_url'],
+			message,
+			tags=['MarsMonitor', status, icon],
+			high_priority=high_priority
+		)
+		
+		time.sleep(config.get('update_frequency', 300))
 
 
 if __name__ == '__main__':

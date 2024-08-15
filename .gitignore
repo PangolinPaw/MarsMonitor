@@ -13,3 +13,6 @@ nohup.out
 # Config/log
 *.json
 *.log
+
+# Test images
+test_images/
