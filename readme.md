@@ -16,7 +16,7 @@ The Raspberry Pi camera must be positioned directly in front of the printer's di
 
 Inside the `assets/` directory is an STL for a bracket that will hold a full-size Pi (i.e. not a Zero) and an official Raspberry Pi camera module and slot beneath the printer is provided:
 
-![3D model of the bracket described above]()
+![3D model of the bracket described above](https://github.com/PangolinPaw/MarsMonitor/blob/main/assets/bracket_render.png?raw=true)
 
 
 ### Software
