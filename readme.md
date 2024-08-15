@@ -4,11 +4,23 @@ Computer vision system for the Raspberry Pi designed to read the progress inform
 
 ## Installation
 
-Clone this repo, then:
-
-`pip install -r requirements.txt`
+### Install tesseract:
 
 If testing on Windows, you'll also need a copy of tesseract placed in the same directory as `mars_monitor.py`, it's available from https://github.com/UB-Mannheim/tesseract/wiki
+
+When running 'for real' on a Raspberry Pi, install tesseract with:
+
+`sudo apt install tesseract-ocr`
+
+`sudo apt install libtesseract-dev`
+
+### Install this application
+
+Clone this repo
+
+Install dependencies:
+
+`pip install -r requirements.txt`
 
 ## Usage
 
