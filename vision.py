@@ -10,7 +10,7 @@ def capture():
         image = cv2.imread('test_images/01.jpg')
     else:
         # TODO: read image from raspberry pi camrea
-        pass
+        image = cv2.imread('test_images/01.jpg')
     image = resize(image, 800)
     return image
 
