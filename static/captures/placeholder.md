@@ -1,0 +1,1 @@
+A copy of the last 10 images captured by the camera is stored here so they can be viewed via the web interface.

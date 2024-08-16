@@ -19,3 +19,6 @@ test_images/
 
 # Tesseract
 Tesseract-OCR/
+
+# Local captures
+static/captures/*png

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Metadata -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    
+    <!-- Stylesheet -->
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            color: #243145;
+            font-family: 'Consolas', monospace;
+        }
+
+        #nav {
+            height: 3em;
+            padding: 0 1em;
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            background-color: #243145;
+            color: #E1E9F4;
+        }
+
+            #nav h1 {
+                margin: 0;
+                padding: 0;
+            }
+
+            #nav img {
+                height: 1.5em;
+            }
+
+        #content {
+            display: grid;
+            grid-template-rows: auto auto;
+            grid-template-columns: auto;
+            max-width: 75em;
+            margin: 0 auto;
+        }
+
+            #hero_capture {
+                margin: 0.25em 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
+
+                #hero_capture div {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                #hero_capture img {
+                    width: 100%;
+                    max-width: 25em;
+                }
+
+                #hero_capture span {
+                    padding: 0.5em 0;
+                }
+
+            #previous_capture {
+                display: flex;
+                overflow-x: scroll;
+                flex-direction: row-reverse;
+                gap: 0.25em;
+                padding-bottom: 0.5em;
+            }
+
+                #previous_capture a {
+                    font-size: 0.6em;
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                #previous_capture img {
+                    width: 25vw;
+                    max-width: 14em;
+                }
+
+        #footer {
+            width: 100vw;
+            height: 1.5em;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+            #footer span {
+                font-size: 0.8em;
+                font-style: italic;
+                opacity: 0.6;
+            }
+
+    </style>
+
+    <!-- Icon & title -->
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename = 'icon.png') }}"/>
+    <title>MarsMonitor</title>
+</head>
+<body>
+    <section id="nav">
+        <img src="{{ url_for('static', filename = 'icon.png') }}">
+        <h1>MarsMonitor</h1>
+    </section>
+    <section id="content">
+        <div id="hero_capture">
+            <div>
+                <img src="{{ url_for('static', filename = '/captures/' + hero) }}">
+                <span>{{ hero }}</span>
+            </div>
+        </div>
+        <div id="previous_capture">
+            {% for capture in captures %}
+                <a href="/?capture={{ capture }}" title="{{ capture }}" >
+                    <img src="{{ url_for('static', filename = '/captures/' + capture) }}">
+                    <span>{{ capture }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+    <section id="footer">
+        <span><a href="https://pangolin.codes" target="_blank">pangolin.codes</a></span>
+    </section>
+</body>
+</html>
