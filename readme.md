@@ -57,9 +57,9 @@ You may want to set `mars_monitor.py` to run automatically at boot, but nstructi
 
 ## To do:
 
-1. Capture image from Pi camera
-2. Extract progress % - DONE
-3. Detect error  - DONE
-4. Read error message
-4. Flask webapp to host latest capture
+1. Extract progress % - DONE
+2. Detect error  - DONE
+3. Flask webapp to host latest capture - DONE
+4. Capture image from Pi camera
+5. Read error message
 
