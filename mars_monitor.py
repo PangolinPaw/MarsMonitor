@@ -3,6 +3,7 @@ import os
 import time
 import requests
 import vision
+import webapp
 
 dirname, _ = os.path.split(os.path.abspath(__file__))
 THIS_DIRECTORY = f'{dirname}{os.sep}'
@@ -53,7 +54,7 @@ def notify(url, message, attachment_url=None, tags=None, high_priority=False):
         headers=headers
    )
 
-def main():
+def monitor(url):
 	config = init()
 	notify(
 		config['ntfy_url'],
@@ -62,6 +63,7 @@ def main():
 	)
 	while True:
 		image = vision.capture()
+		image_filename = vision.save_image(image, f'{THIS_DIRECTORY}static{os.sep}captures')
 		error, progress = vision.get_progress(image)
 		if error is None:
 			status = 'progress'
@@ -80,17 +82,23 @@ def main():
 			message = f'Print error: {error}'
 			status = 'error'
 			icon = 'red_circle'
-			high_priority = True
+			high_priority = True,
+			attachment_url=f'{url}?capture={image_filename}'
 
 		notify(
 			config['ntfy_url'],
 			message,
 			tags=['MarsMonitor', status, icon],
-			high_priority=high_priority
+			high_priority=high_priority,
+			attachment_url=f'{url}?capture={image_filename}'
 		)
 		
 		time.sleep(config.get('update_frequency', 1800))
 
+
+def main():
+	url = webapp.launch()
+	monitor(url)
 
 if __name__ == '__main__':
 	main()

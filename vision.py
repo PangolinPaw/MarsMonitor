@@ -1,5 +1,7 @@
 import cv2
+from datetime import datetime
 import numpy as np
+import os
 from PIL import Image
 import platform
 import pytesseract
@@ -7,7 +9,7 @@ import pytesseract
 def capture():
     '''Capture still image from camera'''
     if platform.system() != 'Linux':
-        image = cv2.imread('test_images/01.jpg')
+        image = cv2.imread('test_images/03.jpg')
     else:
         # TODO: read image from raspberry pi camrea
         image = cv2.imread('test_images/01.jpg')
@@ -76,6 +78,19 @@ def get_progress(image):
         error = 'Unable to read dispaly'
     return error, progress
 
+def list_files(folder, extensions=None):
+    '''list all files of a given type in the specified directory'''
+    file_list = []
+    all_files = os.listdir(folder)
+    for name in all_files:
+        if extensions is not None:
+            for ext in extensions:
+                if name.endswith(ext):
+                    file_list.append(f'{folder}{os.sep}{name}')
+        else:
+            file_list.append(f'{folder}{os.sep}{name}')
+    return file_list
+
 def mask_display(image):
     '''Exclude eveything from the image except white elements to reduce noise'''
     white = {
@@ -101,3 +116,13 @@ def resize(image, width = None, height = None, inter = cv2.INTER_AREA):
         dim = (width, int(h * r))
     resized = cv2.resize(image, dim, interpolation = inter)
     return resized
+
+def save_image(image, save_in):
+    '''save image so it can be displayed via the web interface'''
+    previous_captures = list_files(save_in, ['png'])
+    if len(previous_captures) > 10:
+        os.remove(previous_captures[0])
+    filename = f'{datetime.now().strftime("%Y%m%d%H%M")}.png'
+    save_as = f'{save_in}{os.sep}{filename}'
+    cv2.imwrite(save_as, image)
+    return filename
