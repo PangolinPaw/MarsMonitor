@@ -127,7 +127,7 @@ def save_image(image, save_in):
     previous_captures = list_files(save_in, ['png'])
     if len(previous_captures) > 10:
         os.remove(previous_captures[0])
-    filename = f'{datetime.now().strftime("%Y%m%d%H%M")}.png'
+    filename = f'{datetime.now().strftime("%Y-%m-%d_%H-%M")}.png'
     save_as = f'{save_in}{os.sep}{filename}'
     cv2.imwrite(save_as, image)
     return filename
