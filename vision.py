@@ -2,10 +2,11 @@ import cv2
 from datetime import datetime
 import numpy as np
 import os
-import picamera2
 from PIL import Image
 import platform
 import pytesseract
+if platform.system() == 'Linux':
+    import picamera2
 
 def capture():
     '''Capture still image from camera'''

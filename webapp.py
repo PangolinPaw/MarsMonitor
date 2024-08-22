@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request
 import os
+import requests
 import socket
 import threading
 
@@ -29,17 +30,27 @@ def get_ip():
     s.settimeout(0)
     try:
         s.connect(('10.254.254.254', 1)) # doesn't have to be reachable
-        ip = s.getsockname()[0]
+        internal_ip = s.getsockname()[0]
     except Exception:
-        ip = '127.0.0.1'
+        internal_ip = '127.0.0.1'
     finally:
         s.close()
-    return ip
+
+    r = requests.get('http://ipv4.icanhazip.com')
+    if r.status_code == 200:
+        external_ip = r.text.strip()
+    else:
+        external_ip = None
+    return internal_ip, external_ip
 
 def launch():
     web_thread = threading.Thread(target=app.run, kwargs={'host':'0.0.0.0', 'port':5000})
     web_thread.start()
-    return f'http://{get_ip()}:5000'
+    internal_ip, external_ip = get_ip()
+    if external_ip is not None:
+        return f'http://{internal_ip}:5000', f'http://{external_ip}:5000'
+    else:
+        return f'http://{internal_ip}:5000', None
 
 def list_files(folder, extensions=None):
     file_list = []
@@ -52,7 +63,6 @@ def list_files(folder, extensions=None):
         else:
             file_list.append(f'{folder}{os.sep}{name}')
     return file_list
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

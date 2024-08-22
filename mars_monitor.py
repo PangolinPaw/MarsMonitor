@@ -95,9 +95,12 @@ def monitor(url):
 		
 		time.sleep(config.get('update_frequency', 1800))
 
-
 def main():
-	url = webapp.launch()
+	internal_url, extrenal_url = webapp.launch()
+	if extrenal_url is None:
+		url = internal_url
+	else:
+		url = extrenal_url
 	monitor(url)
 
 if __name__ == '__main__':
