@@ -2,6 +2,7 @@ import cv2
 from datetime import datetime
 import numpy as np
 import os
+import picamera2
 from PIL import Image
 import platform
 import pytesseract
@@ -10,10 +11,13 @@ def capture():
     '''Capture still image from camera'''
     if platform.system() != 'Linux':
         image = cv2.imread('test_images/03.jpg')
+        image = resize(image, 800)
     else:
-        # TODO: read image from raspberry pi camrea
-        image = cv2.imread('test_images/01.jpg')
-    image = resize(image, 800)
+        with picamera2.Picamera2() as camera:
+            config = camera.create_still_configuration(main={"size": (800, 600)})
+            camera.configure(config)
+            camera.start()
+            image = camera.capture_array()
     return image
 
 def find_text(image):
@@ -126,3 +130,9 @@ def save_image(image, save_in):
     save_as = f'{save_in}{os.sep}{filename}'
     cv2.imwrite(save_as, image)
     return filename
+
+if __name__ == '__main__':
+    image = capture()
+    cv2.imwrite('image.png', image)
+
+
