@@ -15,10 +15,13 @@ def capture():
         image = resize(image, 800)
     else:
         with picamera2.Picamera2() as camera:
-            config = camera.create_still_configuration(main={"size": (800, 600)})
+            config = camera.create_still_configuration(
+                main={"size": (800, 600)}
+            )
             camera.configure(config)
             camera.start()
             image = camera.capture_array()
+            image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
     return image
 
 def find_text(image):
