@@ -11,8 +11,7 @@ if platform.system() == 'Linux':
 def capture():
     '''Capture still image from camera'''
     if platform.system() != 'Linux':
-        image = cv2.imread('test_images/03.jpg')
-        image = resize(image, 800)
+        image = cv2.imread('test_images/image.png')
     else:
         with picamera2.Picamera2() as camera:
             config = camera.create_still_configuration(
@@ -101,29 +100,18 @@ def list_files(folder, extensions=None):
 
 def mask_display(image):
     '''Exclude eveything from the image except white elements to reduce noise'''
+    # white = {
+    #     'min':(  0,   0, 230),
+    #     'max':(179,   6, 255)
+    # }
     white = {
-        'min':(  0,   0, 230),
-        'max':(179,   6, 255)
+        'min':(  0,   0, 237),
+        'max':( 34,  14, 255)
     }
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, white['min'], white['max'])
     masked = cv2.bitwise_and(image, image, mask=mask)
     return masked
-
-def resize(image, width = None, height = None, inter = cv2.INTER_AREA):
-    '''Resize image to more manageable dimensions for faster processing'''
-    dim = None
-    (h, w) = image.shape[:2]
-    if width is None and height is None:
-        return image
-    if width is None:
-        r = height / float(h)
-        dim = (int(w * r), height)
-    else:
-        r = width / float(w)
-        dim = (width, int(h * r))
-    resized = cv2.resize(image, dim, interpolation = inter)
-    return resized
 
 def save_image(image, save_in):
     '''save image so it can be displayed via the web interface'''
